@@ -1,0 +1,17 @@
+meta {
+  name: updateOrder
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/teashop/orders/65e6b08817f38f07f5ef47ea
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+   "status": "completed"
+  }
+}

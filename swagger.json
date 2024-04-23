@@ -1,0 +1,263 @@
+ {
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Teashop",
+        "version": "1.0",
+        "description": "5/5 star teashop, based in Ba Sing Se (extracts data from external API and creates orders for tea based on the data extracted)"
+    },
+
+    "servers": [
+        {
+            "url": "http://localhost:8080"
+        }
+    ],
+    "paths": {
+        "/api/characters/": {
+            "get": {
+                "summary": "grabs data from the api and extracts to database",
+                "tags": ["Extract to database"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "data",
+                        "schema": {
+                            "type": "object"
+                        },
+                        "description": "data extraction"
+                    }
+                
+                ],
+                "responses": {
+                    "200": {
+                        "description": "extracts data from api to database",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Characters"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/database/characters": {
+            "get": {
+                "summary": "shows all characters",
+                "tags": ["Show characters"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "characters",
+                        "schema": {
+                            "type": "object"
+                        },
+                        "description": "shows characters"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "shows all characters in database",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Characters"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/teashop/customers/": {
+            "get": {
+                "summary": "shows all customers",
+                "tags": ["Show customers"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "customers",
+                        "schema": {
+                            "type": "object"
+                        },
+                        "description": "shows customers"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "shows all customers in database",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customers"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/teashop/orders/create": {
+            "post": {
+                "summary": "creates an order",
+                "tags": ["Create order"],
+                "responses": {
+                    "200": {
+                        "description": "Order created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Orders"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/teashop/orders/": {
+            "get": {
+                "summary": "shows all orders",
+                "tags": ["Show orders"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "orders",
+                        "schema": {
+                            "type": "object"
+                        },
+                        "description": "show all orders"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "shows a list of all orders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Orders"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/teashop/orders/{id}": {
+            "put": {
+                "summary": "Updates an order",
+                "tags": ["Update order"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID of the order",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The order",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Orders"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Deletes an order",
+                "tags": ["Delete order"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID of the order",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The order",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Orders"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    },
+    "components": {
+        "schemas": {
+            "Characters": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "photoUrl": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "numberOfOrders": {
+                        "type": "number"
+                    }
+                }
+            },
+            "Customers": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "numberOfOrders": {
+                        "type": "number"
+                    }
+                }
+            },
+            "Orders": {
+                "type": "object",
+                "properties": {
+                    "customerName": {
+                        "type": "string"
+                    },
+                    "tea": {
+                        "type": "string"
+                    },
+                    "orderedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "default": "2024-03-03T12:00:00Z"
+                    },
+                    "status": {
+                        "type": "string",
+                        "default": "uncompleted"
+                    }
+                },
+                "required": [
+                    "customerName",
+                    "tea"
+                ]
+            }
+        }
+    }
+}
